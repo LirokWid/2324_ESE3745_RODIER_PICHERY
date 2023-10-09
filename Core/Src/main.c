@@ -25,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <math.h>
 #include "mylibs/shell.h"
 /* USER CODE END Includes */
 
@@ -57,25 +58,86 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int setPWM(int channel,int duty_cycle){
-	if((duty_cycle>100) || (duty_cycle<100)){
-		return -1;
-	}else{
-		const int ccrSize = __HAL_TIM_GET_AUTORELOAD(&htim1);
-		int ccrValue = ccrSize/(((float)duty_cycle)/100);
 
-		switch(channel){
-		case 1:
-			TIM1->CCR1 = ccrValue;
-			break;
-		case 2:
-			TIM1->CCR1 = ccrValue;
-			break;
-		default:
-			return -1;
+
+
+int PWM_state = 0;
+int start_PWM()
+{//Start and init the PWM to speed = 0;
+
+	int speed_stopped = __HAL_TIM_GET_AUTORELOAD(&htim1)/2;
+	TIM1->CCR1 = speed_stopped;
+	TIM1->CCR2 = speed_stopped;
+
+	if(HAL_OK == HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1))
+	{
+		if(HAL_OK == HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2))
+		{
+			if(HAL_OK == HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1))
+			{
+				if(HAL_OK == HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2))
+				{
+					return SUCCESS;
+				}
+			}
 		}
 	}
-	return -1;
+	return ERROR;
+}
+int stop_PWM()
+{
+	/*
+	if (HAL_OK ==(
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1)&&
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1)&&
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2)&&
+			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2)))
+	{
+		return SUCCESS;
+	}else{
+		return ERROR;
+	}
+	*/
+	if(HAL_OK == HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1))
+	{
+		if(HAL_OK == HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2))
+		{
+			if(HAL_OK == HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1))
+			{
+				if(HAL_OK == HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2))
+				{
+					return SUCCESS;
+				}
+			}
+		}
+	}
+	return ERROR;
+}
+
+int set_PWM(int speed)
+{
+	if((speed>100) || (speed<-100))
+	{
+		return ERROR;
+	}else{
+		const int ccr_size = __HAL_TIM_GET_AUTORELOAD(&htim1);
+		int ccr_size_div_2 = ccr_size/2;
+		int ccr_U_value,ccr_V_value;
+		float f_speed = (float)speed/100;
+		if(speed >0)
+		{//sens de marche horaire
+			ccr_U_value = ccr_size_div_2+(f_speed*ccr_size_div_2);
+			ccr_V_value = ccr_size-ccr_U_value;
+		}
+		else
+		{//sens de marche anti_horraire
+			ccr_V_value = ccr_size_div_2+(fabs(f_speed)*ccr_size_div_2);
+			ccr_U_value = ccr_size-ccr_V_value;
+		}
+		TIM1->CCR1 = ccr_U_value;
+		TIM1->CCR2 = ccr_V_value;
+		return SUCCESS;
+	}
 }
 
 /* USER CODE END 0 */
@@ -117,14 +179,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	Shell_Init();
 	//initialiaze PWM
+	start_PWM();
 	//HAL_TIM_Base_Start(&htim1);
-
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-
-
 
   /* USER CODE END 2 */
 
@@ -133,19 +189,18 @@ int main(void)
 	while (1)
 	{
 		//Shell_Loop();
+		set_PWM(-100);
+		HAL_Delay(1000);
+		set_PWM(-50);
+		HAL_Delay(1000);
+		set_PWM(80);
+		HAL_Delay(1000);
+		set_PWM(90);
+		HAL_Delay(1000);
+		stop_PWM();
+		HAL_Delay(2000);
+		start_PWM();
 
-		setPWM(1, 50);
-		HAL_Delay(1000);
-		setPWM(1,31);
-		HAL_Delay(1000);
-		setPWM(1, 12);
-		HAL_Delay(1000);
-		setPWM(1,14);
-		HAL_Delay(1000);
-		setPWM(1, 20);
-		HAL_Delay(1000);
-		setPWM(1,80);
-		HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -37,6 +37,8 @@ uint8_t uartRxReceived;
 uint8_t uartRxBuffer[UART_RX_BUFFER_SIZE];
 uint8_t uartTxBuffer[UART_TX_BUFFER_SIZE];
 
+
+extern int motor_set_speed;
 char	 	cmdBuffer[CMD_BUFFER_SIZE];
 int 		idx_cmd;
 char* 		argv[MAX_ARGS];
@@ -82,16 +84,18 @@ void Shell_Loop(void){
 		uartRxReceived = 0;
 	}
 
-	if(newCmdReady){
-		if(strcmp(argv[0],"WhereisBrian?")==0){
+	if(newCmdReady)
+	{
+		if(strcmp(argv[0],"WhereisBrian?")==0)
+		{
 			HAL_UART_Transmit(&huart2, brian, sizeof(brian), HAL_MAX_DELAY);
 		}
-
-		else if(strcmp(argv[0],"help")==0){
+		else if(strcmp(argv[0],"help")==0)
+		{
 			HAL_UART_Transmit(&huart2, help_prompt, strlen((char *)help_prompt), HAL_MAX_DELAY);
 		}
-
-		else if(strcmp(argv[0],"start")==0){
+		else if(strcmp(argv[0],"start")==0)
+		{
 			int result = start_PWM();
 			if(result == SUCCESS)
 			{
@@ -104,9 +108,9 @@ void Shell_Loop(void){
 				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
 		}
-
-		else if(strcmp(argv[0],"stop")==0){
-			int result = start_PWM();
+		else if(strcmp(argv[0],"stop")==0)
+		{
+			int result = stop_PWM();
 			if(result == SUCCESS)
 			{
 				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\npower OFF");
@@ -118,12 +122,12 @@ void Shell_Loop(void){
 				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
 		}
-
-		else if(strcmp(argv[0],"speed")==0){
+		else if(strcmp(argv[0],"speed")==0)
+		{
 			int val = atoi(argv[1]);
 			if((-100 <= val) && (val<= 100))
 			{
-				set_PWM(val);
+				motor_set_speed = val;
 				int uartTxStringLength = snprintf((char *)uartTxBuffer,UART_TX_BUFFER_SIZE, "\r\nPWM set to %03d", val);
 				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
@@ -133,14 +137,15 @@ void Shell_Loop(void){
 				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
 		}
-
-		else{
+		else
+		{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
 		HAL_UART_Transmit(&huart2, prompt, sizeof(prompt), HAL_MAX_DELAY);
 		newCmdReady = 0;
 	}
 }
+
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	uartRxReceived = 1;

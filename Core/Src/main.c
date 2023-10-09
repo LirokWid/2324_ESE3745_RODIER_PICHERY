@@ -61,11 +61,14 @@ void SystemClock_Config(void);
 
 
 
-int PWM_state = 0;
+int motor_set_speed = 0,motor_current_speed=0;
+
 int start_PWM()
 {//Start and init the PWM to speed = 0;
 
 	int speed_stopped = __HAL_TIM_GET_AUTORELOAD(&htim1)/2;
+	motor_set_speed = 0;
+	motor_current_speed = 0;
 	TIM1->CCR1 = speed_stopped;
 	TIM1->CCR2 = speed_stopped;
 
@@ -114,17 +117,17 @@ int stop_PWM()
 	return ERROR;
 }
 
-int set_PWM(int speed)
+int set_PWM(int new_speed)
 {
-	if((speed>100) || (speed<-100))
+	if((new_speed>100) || (new_speed<-100))
 	{
 		return ERROR;
 	}else{
 		const int ccr_size = __HAL_TIM_GET_AUTORELOAD(&htim1);
 		int ccr_size_div_2 = ccr_size/2;
 		int ccr_U_value,ccr_V_value;
-		float f_speed = (float)speed/100;
-		if(speed >0)
+		float f_speed = (float)new_speed/100;
+		if(new_speed >0)
 		{//sens de marche horaire
 			ccr_U_value = ccr_size_div_2+(f_speed*ccr_size_div_2);
 			ccr_V_value = ccr_size-ccr_U_value;
@@ -189,9 +192,18 @@ int main(void)
 	while (1)
 	{
 		Shell_Loop();
-
+		if(motor_current_speed != motor_set_speed)
+		{
+			if (motor_current_speed < motor_set_speed)
+			{
+				motor_current_speed++;
+			}else{
+				motor_current_speed--;
+			}
+			set_PWM(motor_current_speed);
+			HAL_Delay(50);
+		}
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
 	}
   /* USER CODE END 3 */

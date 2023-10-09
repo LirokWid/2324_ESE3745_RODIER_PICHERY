@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-uint8_t prompt[]="user@Nucleo-STM32G474RET6>>";
+uint8_t prompt[]="pasMaxime@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
 		"\r\n*-----------------------------*"
 		"\r\n| Welcome on Nucleo-STM32G474 |"
@@ -69,14 +69,17 @@ void Shell_Loop(void){
 	}
 
 	if(newCmdReady){
-		if(strcmp(argv[0],"WhereisBrian?")==0){
+		if(strcmp(argv[0],"WhereisBrian?")==0)
+		{
 			HAL_UART_Transmit(&huart2, brian, sizeof(brian), HAL_MAX_DELAY);
 		}
-		else if(strcmp(argv[0],"help")==0){
+		else if(strcmp(argv[0],"help")==0)
+		{
 			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
 			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 		}
-		else{
+		else
+		{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
 		HAL_UART_Transmit(&huart2, prompt, sizeof(prompt), HAL_MAX_DELAY);

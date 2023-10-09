@@ -189,17 +189,6 @@ int main(void)
 	while (1)
 	{
 		//Shell_Loop();
-		set_PWM(-100);
-		HAL_Delay(1000);
-		set_PWM(-50);
-		HAL_Delay(1000);
-		set_PWM(80);
-		HAL_Delay(1000);
-		set_PWM(90);
-		HAL_Delay(1000);
-		stop_PWM();
-		HAL_Delay(2000);
-		start_PWM();
 
     /* USER CODE END WHILE */
 

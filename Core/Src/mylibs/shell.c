@@ -9,12 +9,26 @@
 #include <stdio.h>
 #include <string.h>
 
-uint8_t prompt[]="pasMaxime@Nucleo-STM32G474RET6>>";
+uint8_t prompt[]="pasfredo@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
 		"\r\n*-----------------------------*"
 		"\r\n| Welcome on Nucleo-STM32G474 |"
+		"\r\n|   M.Pichery and B.Rodier    |"
 		"\r\n*-----------------------------*"
 		"\r\n";
+uint8_t help_prompt[]=	"\r\n			Help all command			"
+						"\r\n										"
+						"\r\n- start								"
+						"\r\n	Turns ON the engine power stage		"
+						"\r\n										"
+						"\r\n- stop									"
+						"\r\n	Turns OFF the engine power stage	"
+						"\r\n										"
+						"\r\n- speed XXXX							"
+						"\r\n	Set the motor speed					"
+						"\r\n	100 to full speed clockwise			"
+						"\r\n	-100 to full speed counterclockwise "
+						"\r\n										";
 uint8_t newline[]="\r\n";
 uint8_t backspace[]="\b \b";
 uint8_t cmdNotFound[]="Command not found\r\n";
@@ -69,17 +83,60 @@ void Shell_Loop(void){
 	}
 
 	if(newCmdReady){
-		if(strcmp(argv[0],"WhereisBrian?")==0)
-		{
+		if(strcmp(argv[0],"WhereisBrian?")==0){
 			HAL_UART_Transmit(&huart2, brian, sizeof(brian), HAL_MAX_DELAY);
 		}
-		else if(strcmp(argv[0],"help")==0)
-		{
-			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
-			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+
+		else if(strcmp(argv[0],"help")==0){
+			HAL_UART_Transmit(&huart2, help_prompt, strlen((char *)help_prompt), HAL_MAX_DELAY);
 		}
-		else
-		{
+
+		else if(strcmp(argv[0],"start")==0){
+			int result = start_PWM();
+			if(result == SUCCESS)
+			{
+				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\npower ON \r\nSpeed set to 0");
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+			}
+			if(result == ERROR)
+			{
+				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\nFailed to power ON");
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+			}
+		}
+
+		else if(strcmp(argv[0],"stop")==0){
+			int result = start_PWM();
+			if(result == SUCCESS)
+			{
+				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\npower OFF");
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+			}
+			if(result == ERROR)
+			{
+				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\nFailed to power OFF");
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+			}
+		}
+
+		else if(strcmp(argv[0],"speed")==0){
+			int val = atoi(argv[1]);
+			if((-100 <= val) && (val<= 100))
+			{
+				set_PWM(val);
+				uint8_t buffer[];
+				sprintf(buffer, "\r\nPWM set to %03d", val);
+				HAL_UART_Transmit(&huart2, buffer, sizeof(buffer), HAL_MAX_DELAY);
+			}
+			else
+			{
+				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\nFailed to set PWM");
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+			}
+
+		}
+
+		else{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
 		HAL_UART_Transmit(&huart2, prompt, sizeof(prompt), HAL_MAX_DELAY);

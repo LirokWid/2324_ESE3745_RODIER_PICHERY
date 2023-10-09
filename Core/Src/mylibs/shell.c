@@ -9,12 +9,25 @@
 #include <stdio.h>
 #include <string.h>
 
-uint8_t prompt[]="pasMaxime@Nucleo-STM32G474RET6>>";
+uint8_t prompt[]="pasfredo@Nucleo-STM32G474RET6>>";
 uint8_t started[]=
 		"\r\n*-----------------------------*"
 		"\r\n| Welcome on Nucleo-STM32G474 |"
+		"\r\n|   M.Pichery and B.Rodier    |"
 		"\r\n*-----------------------------*"
 		"\r\n";
+uint8_t help_prompt[]=	"\r\n			Help all command			"
+						"\r\n										"
+						"\r\n- start								"
+						"\r\n	Turns ON the engine power stage		"
+						"\r\n										"
+						"\r\n- stop									"
+						"\r\n	Turns OFF the engine power stage	"
+						"\r\n										"
+						"\r\n- speed XXXX							"
+						"\r\n	Set the motor speed					"
+						"\r\n	100 to full speed clockwise			"
+						"\r\n	-100 to full speed counterclockwise ";
 uint8_t newline[]="\r\n";
 uint8_t backspace[]="\b \b";
 uint8_t cmdNotFound[]="Command not found\r\n";
@@ -69,17 +82,29 @@ void Shell_Loop(void){
 	}
 
 	if(newCmdReady){
-		if(strcmp(argv[0],"WhereisBrian?")==0)
-		{
+		if(strcmp(argv[0],"WhereisBrian?")==0){
 			HAL_UART_Transmit(&huart2, brian, sizeof(brian), HAL_MAX_DELAY);
 		}
-		else if(strcmp(argv[0],"help")==0)
-		{
-			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "Print all available functions here\r\n");
+
+		else if(strcmp(argv[0],"help")==0){
+			HAL_UART_Transmit(&huart2, help_prompt, strlen((char *)help_prompt), HAL_MAX_DELAY);
+		}
+
+		else if(strcmp(argv[0],"start")==0){
+			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "power ON\r\n");
 			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 		}
-		else
-		{
+
+		else if(strcmp(argv[0],"stop")==0){
+			int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "power OFF\r\n");
+			HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
+		}
+
+		else if(strcmp(argv[0],"speed")==0){
+
+		}
+
+		else{
 			HAL_UART_Transmit(&huart2, cmdNotFound, sizeof(cmdNotFound), HAL_MAX_DELAY);
 		}
 		HAL_UART_Transmit(&huart2, prompt, sizeof(prompt), HAL_MAX_DELAY);

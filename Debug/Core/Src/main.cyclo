@@ -2,6 +2,6 @@
 ../Core/Src/main.c:87:5:stop_PWM	5
 ../Core/Src/main.c:117:5:set_PWM	4
 ../Core/Src/main.c:149:5:main	1
-../Core/Src/main.c:215:6:SystemClock_Config	3
-../Core/Src/main.c:268:6:HAL_TIM_PeriodElapsedCallback	2
-../Core/Src/main.c:285:6:Error_Handler	1
+../Core/Src/main.c:204:6:SystemClock_Config	3
+../Core/Src/main.c:257:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/main.c:274:6:Error_Handler	1

@@ -179,7 +179,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	Shell_Init();
 	//initialiaze PWM
-	start_PWM();
+	//start_PWM();
 	//HAL_TIM_Base_Start(&htim1);
 
   /* USER CODE END 2 */
@@ -188,7 +188,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		//Shell_Loop();
+		Shell_Loop();
 
     /* USER CODE END WHILE */
 

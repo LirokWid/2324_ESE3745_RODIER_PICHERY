@@ -124,16 +124,14 @@ void Shell_Loop(void){
 			if((-100 <= val) && (val<= 100))
 			{
 				set_PWM(val);
-				uint8_t buffer[];
-				sprintf(buffer, "\r\nPWM set to %03d", val);
-				HAL_UART_Transmit(&huart2, buffer, sizeof(buffer), HAL_MAX_DELAY);
+				int uartTxStringLength = snprintf((char *)uartTxBuffer,UART_TX_BUFFER_SIZE, "\r\nPWM set to %03d", val);
+				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
 			else
 			{
 				int uartTxStringLength = snprintf((char *)uartTxBuffer, UART_TX_BUFFER_SIZE, "\r\nFailed to set PWM");
 				HAL_UART_Transmit(&huart2, uartTxBuffer, uartTxStringLength, HAL_MAX_DELAY);
 			}
-
 		}
 
 		else{

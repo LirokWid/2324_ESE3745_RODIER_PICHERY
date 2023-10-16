@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -37,6 +38,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define MOTOR_SPEED_UPDATE_RATE 50 //ms
+
+#define DMA_BUFFER_SIZE 2
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,11 +52,17 @@
 /* USER CODE BEGIN PV */
 int motor_set_speed = 0,motor_current_speed=0;
 
+uint32_t adc_buffer[1]; // Double the size for two channels
+int adc_conv_complete = 0;
+uint16_t adc_result1 = 0;
+uint16_t adc_result2 = 0;
+
 typedef struct motor_params_t{
 	float current;
 	int speed;
 }motor_params_t;
 
+motor_params_t motor;
 
 /* USER CODE END PV */
 
@@ -64,7 +73,7 @@ int start_PWM();
 int stop_PWM();
 int set_PWM(int new_speed);
 void motor_speed_control_loop();
-void mesure_loop();
+void mesure_loop(motor_params_t *motor);
 
 /* USER CODE END PFP */
 
@@ -90,7 +99,6 @@ int main(void)
 
   /* USER CODE BEGIN Init */
   uint32_t lastTick = HAL_GetTick();//initialize current tick time
-  motor_params_t motor;
 
   /* USER CODE END Init */
 
@@ -103,6 +111,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC2_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
@@ -111,6 +120,12 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 	Shell_Init();
+
+	// Start the ADC conversion in DMA mode
+	HAL_ADC_Start_DMA(&hadc1, adc_buffer, 1);
+
+//	HAL_ADC_Start_DMA(&hadc2, (uint32_t*)(adc_buffer + DMA_BUFFER_SIZE), DMA_BUFFER_SIZE);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -122,12 +137,13 @@ int main(void)
         {
     		motor_speed_control_loop();
             lastTick = HAL_GetTick();
+            mesure_loop(&motor);
         }
-
-		mesure_loop(&motor);
+		//mesure_loop(&motor);
 		Shell_Loop();
 
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
 	}
   /* USER CODE END 3 */
@@ -183,20 +199,20 @@ void mesure_loop(motor_params_t *motor)
 {
 	/**
 	 * 1.measure motor current
-	 * 2.measure motor speed
 	 */
+	if(adc_conv_complete)
+	{
+		//	gain courant global 1/20
+		//	offset de tension 0.487
+		//	convert ADC value to current in mA
+		float adc_volt = (float)adc_buffer[0]/4096;
+		float offset = 0.487;
 
-    uint16_t adc_current;
-    uint16_t adv_voltage;
-
-    if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
-    	adc_current = HAL_ADC_GetValue(&hadc1);
-    }
-    if (HAL_ADC_PollForConversion(&hadc2, 100) == HAL_OK) {
-    	adv_voltage = HAL_ADC_GetValue(&hadc1);
-    }
-
+	    motor->current 	= (adc_volt-offset)*20;
+	    adc_conv_complete = 0;
+	}
 }
+
 void motor_speed_control_loop()
 {
 	if(motor_current_speed != motor_set_speed)
@@ -210,6 +226,7 @@ void motor_speed_control_loop()
 		set_PWM(motor_current_speed);
 	}
 }
+
 int start_PWM()
 {
     int speed_stopped = __HAL_TIM_GET_AUTORELOAD(&htim1) / 2;
@@ -283,6 +300,17 @@ int set_PWM(int new_speed)
 		return SUCCESS;
 	}
 }
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	adc_conv_complete = 1;
+}
+
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc){
+	HAL_UART_Transmit(&huart2, "ERROR  Call\r\n", 13, 100);
+
+}
+
 /* USER CODE END 4 */
 
 /**

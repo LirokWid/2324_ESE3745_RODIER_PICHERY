@@ -36,7 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define MOTOR_SPEED_UPDATE_RATE 50 //ms
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,101 +47,29 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+int motor_set_speed = 0,motor_current_speed=0;
+
+typedef struct motor_params_t{
+	float current;
+	int speed;
+}motor_params_t;
+
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+int start_PWM();
+int stop_PWM();
+int set_PWM(int new_speed);
+void motor_speed_control_loop();
+void mesure_loop();
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-
-
-int motor_set_speed = 0,motor_current_speed=0;
-
-int start_PWM()
-{//Start and init the PWM to speed = 0;
-
-	int speed_stopped = __HAL_TIM_GET_AUTORELOAD(&htim1)/2;
-	motor_set_speed = 0;
-	motor_current_speed = 0;
-	TIM1->CCR1 = speed_stopped;
-	TIM1->CCR2 = speed_stopped;
-
-	if(HAL_OK == HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1))
-	{
-		if(HAL_OK == HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2))
-		{
-			if(HAL_OK == HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1))
-			{
-				if(HAL_OK == HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2))
-				{
-					return SUCCESS;
-				}
-			}
-		}
-	}
-	return ERROR;
-}
-int stop_PWM()
-{
-	/*
-	if (HAL_OK ==(
-			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1)&&
-			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1)&&
-			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2)&&
-			HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2)))
-	{
-		return SUCCESS;
-	}else{
-		return ERROR;
-	}
-	*/
-	if(HAL_OK == HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1))
-	{
-		if(HAL_OK == HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2))
-		{
-			if(HAL_OK == HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1))
-			{
-				if(HAL_OK == HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2))
-				{
-					return SUCCESS;
-				}
-			}
-		}
-	}
-	return ERROR;
-}
-
-int set_PWM(int new_speed)
-{
-	if((new_speed>100) || (new_speed<-100))
-	{
-		return ERROR;
-	}else{
-		const int ccr_size = __HAL_TIM_GET_AUTORELOAD(&htim1);
-		int ccr_size_div_2 = ccr_size/2;
-		int ccr_U_value,ccr_V_value;
-		float f_speed = (float)new_speed/100;
-		if(new_speed >0)
-		{//sens de marche horaire
-			ccr_U_value = ccr_size_div_2+(f_speed*ccr_size_div_2);
-			ccr_V_value = ccr_size-ccr_U_value;
-		}
-		else
-		{//sens de marche anti_horraire
-			ccr_V_value = ccr_size_div_2+(fabs(f_speed)*ccr_size_div_2);
-			ccr_U_value = ccr_size-ccr_V_value;
-		}
-		TIM1->CCR1 = ccr_U_value;
-		TIM1->CCR2 = ccr_V_value;
-		return SUCCESS;
-	}
-}
 
 /* USER CODE END 0 */
 
@@ -161,6 +89,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  uint32_t lastTick = HAL_GetTick();//initialize current tick time
+  motor_params_t motor;
 
   /* USER CODE END Init */
 
@@ -181,28 +111,22 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 	Shell_Init();
-	//initialiaze PWM
-	//start_PWM();
-	//HAL_TIM_Base_Start(&htim1);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		//use stm32 tick time to enter the function every N Ms
+        if ((HAL_GetTick() - lastTick) >= MOTOR_SPEED_UPDATE_RATE)
+        {
+    		motor_speed_control_loop();
+            lastTick = HAL_GetTick();
+        }
+
+		mesure_loop(&motor);
 		Shell_Loop();
-		if(motor_current_speed != motor_set_speed)
-		{
-			if (motor_current_speed < motor_set_speed)
-			{
-				motor_current_speed++;
-			}else{
-				motor_current_speed--;
-			}
-			set_PWM(motor_current_speed);
-			HAL_Delay(50);
-		}
+
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
 	}
@@ -255,7 +179,110 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void mesure_loop(motor_params_t *motor)
+{
+	/**
+	 * 1.measure motor current
+	 * 2.measure motor speed
+	 */
 
+    uint16_t adc_current;
+    uint16_t adv_voltage;
+
+    if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
+    	adc_current = HAL_ADC_GetValue(&hadc1);
+    }
+    if (HAL_ADC_PollForConversion(&hadc2, 100) == HAL_OK) {
+    	adv_voltage = HAL_ADC_GetValue(&hadc1);
+    }
+
+}
+void motor_speed_control_loop()
+{
+	if(motor_current_speed != motor_set_speed)
+	{
+		if (motor_current_speed < motor_set_speed)
+		{
+			motor_current_speed++;
+		}else{
+			motor_current_speed--;
+		}
+		set_PWM(motor_current_speed);
+	}
+}
+int start_PWM()
+{
+    int speed_stopped = __HAL_TIM_GET_AUTORELOAD(&htim1) / 2;
+    motor_set_speed = 0;
+    motor_current_speed = 0;
+    TIM1->CCR1 = speed_stopped;
+    TIM1->CCR2 = speed_stopped;
+
+    if (HAL_OK != HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2)) {
+        return ERROR;
+    }
+
+    return SUCCESS;
+}
+
+int stop_PWM()
+{
+    if (HAL_OK != HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1)) {
+        return ERROR;
+    }
+
+    if (HAL_OK != HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2)) {
+        return ERROR;
+    }
+
+    return SUCCESS;
+}
+
+int set_PWM(int new_speed)
+{
+	if((new_speed>100) || (new_speed<-100))
+	{
+		return ERROR;
+	}else{
+		const int ccr_size = __HAL_TIM_GET_AUTORELOAD(&htim1);
+		int ccr_size_div_2 = ccr_size/2;
+		int ccr_U_value,ccr_V_value;
+		float f_speed = (float)new_speed/100;
+		if(new_speed >0)
+		{//sens de marche horaire
+			ccr_U_value = ccr_size_div_2+(f_speed*ccr_size_div_2);
+			ccr_V_value = ccr_size-ccr_U_value;
+		}
+		else
+		{//sens de marche anti_horraire
+			ccr_V_value = ccr_size_div_2+(fabs(f_speed)*ccr_size_div_2);
+			ccr_U_value = ccr_size-ccr_V_value;
+		}
+		TIM1->CCR1 = ccr_U_value;
+		TIM1->CCR2 = ccr_V_value;
+		return SUCCESS;
+	}
+}
 /* USER CODE END 4 */
 
 /**

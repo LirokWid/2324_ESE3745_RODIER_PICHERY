@@ -42,7 +42,7 @@ Before getting started, make sure you have the following:
 
 4. Power up the system and start the shell interface.
 
-##Usage
+## Usage
 
 When you power up the system, it will initialize and display a shell prompt.
 

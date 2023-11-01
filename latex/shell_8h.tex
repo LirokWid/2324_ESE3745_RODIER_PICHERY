@@ -1,0 +1,64 @@
+\doxysection{Core/\+Inc/mylibs/shell.h File Reference}
+\hypertarget{shell_8h}{}\label{shell_8h}\index{Core/Inc/mylibs/shell.h@{Core/Inc/mylibs/shell.h}}
+
+
+Header file for the implementation of a simple shell for Nucleo-\/\+STM32\+G474.  
+
+
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{shell_8h_a5bdd6772c246436bb14377095de79b31}\label{shell_8h_a5bdd6772c246436bb14377095de79b31} 
+\#define {\bfseries UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE}~1
+\begin{DoxyCompactList}\small\item\em Size of the UART receive buffer. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_a05f5d709605c6317c97e4974bec3402a}\label{shell_8h_a05f5d709605c6317c97e4974bec3402a} 
+\#define {\bfseries UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}~64
+\begin{DoxyCompactList}\small\item\em Size of the UART transmit buffer. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_a8a0465f8e8bbe71e4d6e8011e975bf75}\label{shell_8h_a8a0465f8e8bbe71e4d6e8011e975bf75} 
+\#define {\bfseries CMD\+\_\+\+BUFFER\+\_\+\+SIZE}~64
+\begin{DoxyCompactList}\small\item\em Size of the command buffer for storing user input. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_a29b7451465deac204c5f7cb1f9c6e1fc}\label{shell_8h_a29b7451465deac204c5f7cb1f9c6e1fc} 
+\#define {\bfseries MAX\+\_\+\+ARGS}~9
+\begin{DoxyCompactList}\small\item\em Maximum number of command arguments. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_aca3b498f5936dbe4f3076a47c3e1810d}\label{shell_8h_aca3b498f5936dbe4f3076a47c3e1810d} 
+\#define {\bfseries ASCII\+\_\+\+LF}~0x0A
+\begin{DoxyCompactList}\small\item\em ASCII value for Line Feed (LF). \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_a089ed4925403ab02a05e603967c74579}\label{shell_8h_a089ed4925403ab02a05e603967c74579} 
+\#define {\bfseries ASCII\+\_\+\+CR}~0x0D
+\begin{DoxyCompactList}\small\item\em ASCII value for Carriage Return (CR). \end{DoxyCompactList}\item 
+\Hypertarget{shell_8h_a681f208df4071753dd6a7a71d0f5780e}\label{shell_8h_a681f208df4071753dd6a7a71d0f5780e} 
+\#define {\bfseries ASCII\+\_\+\+BACK}~0x08
+\begin{DoxyCompactList}\small\item\em ASCII value for Backspace (BACK). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{shell_8h_a1e1a7212cd1e25d36ce85620f03f996e}\label{shell_8h_a1e1a7212cd1e25d36ce85620f03f996e} 
+void {\bfseries Shell\+\_\+\+Init} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the shell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{shell_8h_a9f70d5542e7f7f470ff7cd7d482caeb7}{Shell\+\_\+\+Loop}} (void)
+\begin{DoxyCompactList}\small\item\em Main loop of the shell for processing user commands. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for the implementation of a simple shell for Nucleo-\/\+STM32\+G474. 
+
+\begin{DoxyDate}{Date}
+October 1, 2023 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Nicolas 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{shell_8h_a9f70d5542e7f7f470ff7cd7d482caeb7}\label{shell_8h_a9f70d5542e7f7f470ff7cd7d482caeb7} 
+\index{shell.h@{shell.h}!Shell\_Loop@{Shell\_Loop}}
+\index{Shell\_Loop@{Shell\_Loop}!shell.h@{shell.h}}
+\doxysubsubsection{\texorpdfstring{Shell\_Loop()}{Shell\_Loop()}}
+{\footnotesize\ttfamily void Shell\+\_\+\+Loop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Main loop of the shell for processing user commands. 
+
+Main loop of the shell for processing user commands. 

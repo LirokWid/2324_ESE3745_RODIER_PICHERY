@@ -1,0 +1,119 @@
+\doxysection{Core/\+Inc/main.h File Reference}
+\hypertarget{main_8h}{}\label{main_8h}\index{Core/Inc/main.h@{Core/Inc/main.h}}
+
+
+\+: Header for \doxylink{main_8c}{main.\+c} file. This file contains the common defines of the application.  
+
+
+{\ttfamily \#include "{}stm32g4xx\+\_\+hal.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8h_a158931264dc3c964aeb8282d0755b665}\label{main_8h_a158931264dc3c964aeb8282d0755b665} 
+\#define {\bfseries USR\+\_\+\+BTN\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+13
+\item 
+\Hypertarget{main_8h_aff83915dc06a1ac4ee242533045c6f43}\label{main_8h_aff83915dc06a1ac4ee242533045c6f43} 
+\#define {\bfseries USR\+\_\+\+BTN\+\_\+\+GPIO\+\_\+\+Port}~GPIOC
+\item 
+\Hypertarget{main_8h_a0d56b69f5247cccd56940c5f01d99521}\label{main_8h_a0d56b69f5247cccd56940c5f01d99521} 
+\#define {\bfseries USR\+\_\+\+BTN\+\_\+\+EXTI\+\_\+\+IRQn}~\mbox{\hyperlink{group___peripheral__interrupt__number__definition_gga7e1129cd8a196f4284d41db3e82ad5c8a9fb0ad0c850234d1983fafdb17378e2f}{EXTI15\+\_\+10\+\_\+\+IRQn}}
+\item 
+\Hypertarget{main_8h_a5b096511c8f8e1c2b1e53aacd0b476e8}\label{main_8h_a5b096511c8f8e1c2b1e53aacd0b476e8} 
+\#define {\bfseries U\+\_\+\+VPh\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+0
+\item 
+\Hypertarget{main_8h_a694f3f2a7762e5346582a34a84fc70d1}\label{main_8h_a694f3f2a7762e5346582a34a84fc70d1} 
+\#define {\bfseries U\+\_\+\+VPh\+\_\+\+GPIO\+\_\+\+Port}~GPIOC
+\item 
+\Hypertarget{main_8h_a27faebf82c8e12ddccb0a5ff98f8c7fd}\label{main_8h_a27faebf82c8e12ddccb0a5ff98f8c7fd} 
+\#define {\bfseries W\+\_\+\+VPh\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+1
+\item 
+\Hypertarget{main_8h_a6c8d2416e77da856269129f83f224674}\label{main_8h_a6c8d2416e77da856269129f83f224674} 
+\#define {\bfseries W\+\_\+\+VPh\+\_\+\+GPIO\+\_\+\+Port}~GPIOC
+\item 
+\Hypertarget{main_8h_a3f5d378c3afdbf9ad6f63a412f2f8913}\label{main_8h_a3f5d378c3afdbf9ad6f63a412f2f8913} 
+\#define {\bfseries Bus\+\_\+\+Imes\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+2
+\item 
+\Hypertarget{main_8h_a825e3f437e6ae14b4f602b59d5a26767}\label{main_8h_a825e3f437e6ae14b4f602b59d5a26767} 
+\#define {\bfseries Bus\+\_\+\+Imes\+\_\+\+GPIO\+\_\+\+Port}~GPIOC
+\item 
+\Hypertarget{main_8h_a6dc981b6346185b1302c57dbbf5a65fa}\label{main_8h_a6dc981b6346185b1302c57dbbf5a65fa} 
+\#define {\bfseries V\+\_\+\+VPh\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+3
+\item 
+\Hypertarget{main_8h_aeb7e9d19e04d93b06f348717b3f205c2}\label{main_8h_aeb7e9d19e04d93b06f348717b3f205c2} 
+\#define {\bfseries V\+\_\+\+VPh\+\_\+\+GPIO\+\_\+\+Port}~GPIOC
+\item 
+\Hypertarget{main_8h_a3ecf27242083c046aa6cdc2258b4444a}\label{main_8h_a3ecf27242083c046aa6cdc2258b4444a} 
+\#define {\bfseries Bus\+\_\+\+V\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+0
+\item 
+\Hypertarget{main_8h_ad6d947a22b3a7605abdd773e431fd52f}\label{main_8h_ad6d947a22b3a7605abdd773e431fd52f} 
+\#define {\bfseries Bus\+\_\+\+V\+\_\+\+GPIO\+\_\+\+Port}~GPIOA
+\item 
+\Hypertarget{main_8h_a6ce1aad5e7bc4002cbc27a683994c484}\label{main_8h_a6ce1aad5e7bc4002cbc27a683994c484} 
+\#define {\bfseries U\+\_\+\+Imes\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+1
+\item 
+\Hypertarget{main_8h_a2f2cb22ae33ad64d46d21fd7076e1403}\label{main_8h_a2f2cb22ae33ad64d46d21fd7076e1403} 
+\#define {\bfseries U\+\_\+\+Imes\+\_\+\+GPIO\+\_\+\+Port}~GPIOA
+\item 
+\Hypertarget{main_8h_a0aa7801f202f2b77085347074a1f2948}\label{main_8h_a0aa7801f202f2b77085347074a1f2948} 
+\#define {\bfseries USR\+\_\+\+LED\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+5
+\item 
+\Hypertarget{main_8h_a0b60cb7e96ec15462f633f32f5fb197a}\label{main_8h_a0b60cb7e96ec15462f633f32f5fb197a} 
+\#define {\bfseries USR\+\_\+\+LED\+\_\+\+GPIO\+\_\+\+Port}~GPIOA
+\item 
+\Hypertarget{main_8h_a20d0c61c6be06f9e3dd0476996f108ad}\label{main_8h_a20d0c61c6be06f9e3dd0476996f108ad} 
+\#define {\bfseries T\+\_\+\+SWDIO\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+13
+\item 
+\Hypertarget{main_8h_a5b133bbad2494c84e7268b552def76d1}\label{main_8h_a5b133bbad2494c84e7268b552def76d1} 
+\#define {\bfseries T\+\_\+\+SWDIO\+\_\+\+GPIO\+\_\+\+Port}~GPIOA
+\item 
+\Hypertarget{main_8h_a3c891e8c1436da67e20c097ed3ae73cf}\label{main_8h_a3c891e8c1436da67e20c097ed3ae73cf} 
+\#define {\bfseries T\+\_\+\+SWCLK\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+14
+\item 
+\Hypertarget{main_8h_aa13afc64c30db4eed10d4747f962a5b0}\label{main_8h_aa13afc64c30db4eed10d4747f962a5b0} 
+\#define {\bfseries T\+\_\+\+SWCLK\+\_\+\+GPIO\+\_\+\+Port}~GPIOA
+\item 
+\Hypertarget{main_8h_af92be3f05c2e7de721bfc1b218e5b855}\label{main_8h_af92be3f05c2e7de721bfc1b218e5b855} 
+\#define {\bfseries NRST\+\_\+\+Safety\+UC\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+2
+\item 
+\Hypertarget{main_8h_a772b3d279496291b8571727e70b28e5f}\label{main_8h_a772b3d279496291b8571727e70b28e5f} 
+\#define {\bfseries NRST\+\_\+\+Safety\+UC\+\_\+\+GPIO\+\_\+\+Port}~GPIOD
+\item 
+\Hypertarget{main_8h_a8a7de51b6e3a34adee7ad40319fa24bd}\label{main_8h_a8a7de51b6e3a34adee7ad40319fa24bd} 
+\#define {\bfseries T\+\_\+\+SWO\+\_\+\+Pin}~GPIO\+\_\+\+PIN\+\_\+3
+\item 
+\Hypertarget{main_8h_a92aa264efbd0d858501f267e64b03140}\label{main_8h_a92aa264efbd0d858501f267e64b03140} 
+\#define {\bfseries T\+\_\+\+SWO\+\_\+\+GPIO\+\_\+\+Port}~GPIOB
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8h_a1730ffe1e560465665eb47d9264826f9}{Error\+\_\+\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em This function is executed in case of error occurrence. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\+: Header for \doxylink{main_8c}{main.\+c} file. This file contains the common defines of the application. 
+
+\begin{DoxyAttention}{Attention}
+
+\end{DoxyAttention}
+Copyright (c) 2023 STMicroelectronics. All rights reserved.
+
+This software is licensed under terms that can be found in the LICENSE file in the root directory of this software component. If no LICENSE file comes with this software, it is provided AS-\/\+IS. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8h_a1730ffe1e560465665eb47d9264826f9}\label{main_8h_a1730ffe1e560465665eb47d9264826f9} 
+\index{main.h@{main.h}!Error\_Handler@{Error\_Handler}}
+\index{Error\_Handler@{Error\_Handler}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{Error\_Handler()}{Error\_Handler()}}
+{\footnotesize\ttfamily void Error\+\_\+\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function is executed in case of error occurrence. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em None} & \\
+\hline
+\end{DoxyRetVals}

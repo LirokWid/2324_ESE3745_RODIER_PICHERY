@@ -1,0 +1,146 @@
+\doxysection{Core/\+Src/mylibs/shell.c File Reference}
+\hypertarget{shell_8c}{}\label{shell_8c}\index{Core/Src/mylibs/shell.c@{Core/Src/mylibs/shell.c}}
+
+
+This file contains the implementation of a simple shell for Nucleo-\/\+STM32\+G474.  
+
+
+{\ttfamily \#include "{}usart.\+h"{}}\newline
+{\ttfamily \#include "{}mylibs/shell.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{shell_8c_a1e1a7212cd1e25d36ce85620f03f996e}\label{shell_8c_a1e1a7212cd1e25d36ce85620f03f996e} 
+void {\bfseries Shell\+\_\+\+Init} (void)
+\begin{DoxyCompactList}\small\item\em Initializes the shell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{shell_8c_a9f70d5542e7f7f470ff7cd7d482caeb7}{Shell\+\_\+\+Loop}} (void)
+\begin{DoxyCompactList}\small\item\em Main loop of the shell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group___u_a_r_t___exported___functions___group2_gae494a9643f29b87d6d81e5264e60e57b}{HAL\+\_\+\+UART\+\_\+\+Rx\+Cplt\+Callback}} (\mbox{\hyperlink{group___u_a_r_t___exported___types_ga5de4a49eb132735325e706f406c69d6e}{UART\+\_\+\+Handle\+Type\+Def}} \texorpdfstring{$\ast$}{*}huart)
+\begin{DoxyCompactList}\small\item\em Callback function for UART data reception. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{shell_8c_afbe8418041cff1d4c0124e4e3afd15d1}\label{shell_8c_afbe8418041cff1d4c0124e4e3afd15d1} 
+uint8\+\_\+t {\bfseries prompt} \mbox{[}$\,$\mbox{]} = "{}Rodier\+\_\+\+Pichery@Nucleo-\/STM32\+G474\+RET6$>$$>$"{}
+\begin{DoxyCompactList}\small\item\em Prompt displayed in the shell. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{shell_8c_a705352313075192ba7274d4662cd5de0}{started}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Welcome message displayed at the start of the shell. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{shell_8c_a283784e9e120b479993438488b5504f6}{help\+\_\+prompt}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Help text with available commands. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a9401145671b400ace2a6c1e1e3d0e8c0}\label{shell_8c_a9401145671b400ace2a6c1e1e3d0e8c0} 
+uint8\+\_\+t {\bfseries newline} \mbox{[}$\,$\mbox{]} = "{}\textbackslash{}r\textbackslash{}n"{}
+\begin{DoxyCompactList}\small\item\em Newline character. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_aa0c16b5f3491e6dd87aca1e769516817}\label{shell_8c_aa0c16b5f3491e6dd87aca1e769516817} 
+uint8\+\_\+t {\bfseries backspace} \mbox{[}$\,$\mbox{]} = "{}\textbackslash{}b \textbackslash{}b"{}
+\begin{DoxyCompactList}\small\item\em Backspace character used for clearing characters. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a790b3e5a91031bd957d513c19f4932dc}\label{shell_8c_a790b3e5a91031bd957d513c19f4932dc} 
+uint8\+\_\+t {\bfseries cmd\+Not\+Found} \mbox{[}$\,$\mbox{]} = "{}/!\textbackslash{}\textbackslash{} Command not found /!\textbackslash{}\textbackslash{} \textbackslash{}r\textbackslash{}n"{}
+\begin{DoxyCompactList}\small\item\em Message for an unknown command. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_af5b1a9a2e712f34d8db24e3e30c38397}\label{shell_8c_af5b1a9a2e712f34d8db24e3e30c38397} 
+uint8\+\_\+t {\bfseries uart\+Rx\+Received}
+\begin{DoxyCompactList}\small\item\em Flag to indicate UART data reception. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a6d2f76c160a7d9c648740533aa1e3069}\label{shell_8c_a6d2f76c160a7d9c648740533aa1e3069} 
+uint8\+\_\+t {\bfseries uart\+Rx\+Buffer} \mbox{[}\mbox{\hyperlink{shell_8h_a5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Buffer for receiving UART data. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a1c36b98a681ce43e672c6f03c42e750e}\label{shell_8c_a1c36b98a681ce43e672c6f03c42e750e} 
+uint8\+\_\+t {\bfseries uart\+Tx\+Buffer} \mbox{[}\mbox{\hyperlink{shell_8h_a05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Buffer for transmitting UART data. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a9c9e75745a210df30d7aa6e976ea0a88}\label{shell_8c_a9c9e75745a210df30d7aa6e976ea0a88} 
+int {\bfseries motor\+\_\+set\+\_\+speed}
+\begin{DoxyCompactList}\small\item\em External variable for motor speed. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a70a561099c5f9afb1d34b262ee138746}\label{shell_8c_a70a561099c5f9afb1d34b262ee138746} 
+char {\bfseries cmd\+Buffer} \mbox{[}\mbox{\hyperlink{shell_8h_a8a0465f8e8bbe71e4d6e8011e975bf75}{CMD\+\_\+\+BUFFER\+\_\+\+SIZE}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Buffer for storing the received command. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_afcee8e4de291077fb00c00535852b530}\label{shell_8c_afcee8e4de291077fb00c00535852b530} 
+int {\bfseries idx\+\_\+cmd}
+\begin{DoxyCompactList}\small\item\em Index for the current position in the command buffer. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a53d2d510de1ad9a26de9df167c21eec1}\label{shell_8c_a53d2d510de1ad9a26de9df167c21eec1} 
+char \texorpdfstring{$\ast$}{*} {\bfseries argv} \mbox{[}\mbox{\hyperlink{shell_8h_a29b7451465deac204c5f7cb1f9c6e1fc}{MAX\+\_\+\+ARGS}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array of command arguments. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_aaab0d2861777764f0747bc95c3b6540a}\label{shell_8c_aaab0d2861777764f0747bc95c3b6540a} 
+int {\bfseries argc} = 0
+\begin{DoxyCompactList}\small\item\em Number of command arguments. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a87da3d8264af1c9427605148f20dd9c4}\label{shell_8c_a87da3d8264af1c9427605148f20dd9c4} 
+char \texorpdfstring{$\ast$}{*} {\bfseries token}
+\begin{DoxyCompactList}\small\item\em Tokenized command argument. \end{DoxyCompactList}\item 
+\Hypertarget{shell_8c_a22cc25cd62dd72711245c2df25c508cb}\label{shell_8c_a22cc25cd62dd72711245c2df25c508cb} 
+int {\bfseries new\+Cmd\+Ready} = 0
+\begin{DoxyCompactList}\small\item\em Flag to indicate a new command is ready to be processed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file contains the implementation of a simple shell for Nucleo-\/\+STM32\+G474. 
+
+\begin{DoxyDate}{Date}
+October 1, 2023 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Nicolas 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{shell_8c_a9f70d5542e7f7f470ff7cd7d482caeb7}\label{shell_8c_a9f70d5542e7f7f470ff7cd7d482caeb7} 
+\index{shell.c@{shell.c}!Shell\_Loop@{Shell\_Loop}}
+\index{Shell\_Loop@{Shell\_Loop}!shell.c@{shell.c}}
+\doxysubsubsection{\texorpdfstring{Shell\_Loop()}{Shell\_Loop()}}
+{\footnotesize\ttfamily void Shell\+\_\+\+Loop (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Main loop of the shell. 
+
+Main loop of the shell for processing user commands. 
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{shell_8c_a283784e9e120b479993438488b5504f6}\label{shell_8c_a283784e9e120b479993438488b5504f6} 
+\index{shell.c@{shell.c}!help\_prompt@{help\_prompt}}
+\index{help\_prompt@{help\_prompt}!shell.c@{shell.c}}
+\doxysubsubsection{\texorpdfstring{help\_prompt}{help\_prompt}}
+{\footnotesize\ttfamily help\+\_\+prompt}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ \ \ \ \ \ \ \ Help\ all\ command\ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n-\/\ start\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ Turns\ ON\ the\ engine\ power\ stage\ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n-\/\ stop\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ Turns\ OFF\ the\ engine\ power\ stage\ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n-\/\ speed\ XXXX\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ Set\ the\ motor\ speed\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ 100\ to\ full\ speed\ Clockwise\ \ \ \ \ \ \ \ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ -\/100\ to\ full\ speed\ CounterClockwise\ "{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ "{}}}
+
+\end{DoxyCode}
+
+
+Help text with available commands. 
+
+\Hypertarget{shell_8c_a705352313075192ba7274d4662cd5de0}\label{shell_8c_a705352313075192ba7274d4662cd5de0} 
+\index{shell.c@{shell.c}!started@{started}}
+\index{started@{started}!shell.c@{shell.c}}
+\doxysubsubsection{\texorpdfstring{started}{started}}
+{\footnotesize\ttfamily started}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n|\ Welcome\ on\ Nucleo-\/STM32G474\ |"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n|\ \ \ M.Pichery\ and\ B.Rodier\ \ \ \ |"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n"{}}}
+
+\end{DoxyCode}
+
+
+Welcome message displayed at the start of the shell. 
+

@@ -1,0 +1,160 @@
+\doxysection{Core/\+Src/main.c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{Core/Src/main.c@{Core/Src/main.c}}
+
+
+\+: Main program body  
+
+
+{\ttfamily \#include "{}main.\+h"{}}\newline
+{\ttfamily \#include "{}adc.\+h"{}}\newline
+{\ttfamily \#include "{}dma.\+h"{}}\newline
+{\ttfamily \#include "{}tim.\+h"{}}\newline
+{\ttfamily \#include "{}usart.\+h"{}}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include "{}mylibs/shell.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structmotor__params__t}{motor\+\_\+params\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_ac883af54f9970336c403fa5ad87e3a62}\label{main_8c_ac883af54f9970336c403fa5ad87e3a62} 
+\#define {\bfseries MOTOR\+\_\+\+SPEED\+\_\+\+UPDATE\+\_\+\+RATE}~50
+\item 
+\Hypertarget{main_8c_ac58748de79395a1751fc333bbc7ebd6b}\label{main_8c_ac58748de79395a1751fc333bbc7ebd6b} 
+\#define {\bfseries DMA\+\_\+\+BUFFER\+\_\+\+SIZE}~2
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_aed6df197b6b6f314437c89794d5e3d09}\label{main_8c_aed6df197b6b6f314437c89794d5e3d09} 
+typedef struct \mbox{\hyperlink{structmotor__params__t}{motor\+\_\+params\+\_\+t}} {\bfseries motor\+\_\+params\+\_\+t}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8c_a70af21c671abfcc773614a9a4f63d920}{System\+Clock\+\_\+\+Config}} (void)
+\begin{DoxyCompactList}\small\item\em System Clock Configuration. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_ac0b1be04060d0dea1b9cba6388541751}\label{main_8c_ac0b1be04060d0dea1b9cba6388541751} 
+int {\bfseries start\+\_\+\+PWM} ()
+\item 
+\Hypertarget{main_8c_a040fbcdcf5c8de0758e4f30f5ad2ce65}\label{main_8c_a040fbcdcf5c8de0758e4f30f5ad2ce65} 
+int {\bfseries stop\+\_\+\+PWM} ()
+\item 
+\Hypertarget{main_8c_a0bfb365561956df973f468186bc1b165}\label{main_8c_a0bfb365561956df973f468186bc1b165} 
+int {\bfseries set\+\_\+\+PWM} (int new\+\_\+speed)
+\item 
+\Hypertarget{main_8c_ac0f54b6808ba3489ca3982ac3a138d50}\label{main_8c_ac0f54b6808ba3489ca3982ac3a138d50} 
+void {\bfseries motor\+\_\+speed\+\_\+control\+\_\+loop} ()
+\item 
+void \mbox{\hyperlink{main_8c_a7f40d62749b2d719089762eff4d66593}{measure\+\_\+loop}} (\mbox{\hyperlink{structmotor__params__t}{motor\+\_\+params\+\_\+t}} \texorpdfstring{$\ast$}{*}motor)
+\item 
+int \mbox{\hyperlink{main_8c_a840291bc02cba5474a4cb46a9b9566fe}{main}} (void)
+\begin{DoxyCompactList}\small\item\em The application entry point. \end{DoxyCompactList}\item 
+void {\bfseries HAL\+\_\+\+ADC\+\_\+\+Conv\+Cplt\+Callback} (\mbox{\hyperlink{struct_a_d_c___handle_type_def}{ADC\+\_\+\+Handle\+Type\+Def}} \texorpdfstring{$\ast$}{*}hadc)
+\item 
+void {\bfseries HAL\+\_\+\+ADC\+\_\+\+Error\+Callback} (\mbox{\hyperlink{struct_a_d_c___handle_type_def}{ADC\+\_\+\+Handle\+Type\+Def}} \texorpdfstring{$\ast$}{*}hadc)
+\item 
+void \mbox{\hyperlink{group___t_i_m___exported___functions___group9_ga8a3b0ad512a6e6c6157440b68d395eac}{HAL\+\_\+\+TIM\+\_\+\+Period\+Elapsed\+Callback}} (\mbox{\hyperlink{struct_t_i_m___handle_type_def}{TIM\+\_\+\+Handle\+Type\+Def}} \texorpdfstring{$\ast$}{*}htim)
+\begin{DoxyCompactList}\small\item\em Period elapsed callback in non-\/blocking mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a1730ffe1e560465665eb47d9264826f9}{Error\+\_\+\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em This function is executed in case of error occurrence. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_a1403427e199dacd28613261420b83923}\label{main_8c_a1403427e199dacd28613261420b83923} 
+int {\bfseries motor\+\_\+set\+\_\+speed} = 0
+\begin{DoxyCompactList}\small\item\em External variable for motor speed. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_a7f04ca0680697045d6a60173839fbb2a}\label{main_8c_a7f04ca0680697045d6a60173839fbb2a} 
+int {\bfseries motor\+\_\+current\+\_\+speed} = 0
+\item 
+\Hypertarget{main_8c_a11d1ffb315a067de92061294f511142a}\label{main_8c_a11d1ffb315a067de92061294f511142a} 
+uint32\+\_\+t {\bfseries adc\+\_\+buffer} \mbox{[}1\mbox{]}
+\item 
+\Hypertarget{main_8c_aa53521a693b363a70fc7c9223b377573}\label{main_8c_aa53521a693b363a70fc7c9223b377573} 
+int {\bfseries adc\+\_\+conv\+\_\+complete} = 0
+\item 
+\Hypertarget{main_8c_ad13b47cd6b0677be7493d455081b7ade}\label{main_8c_ad13b47cd6b0677be7493d455081b7ade} 
+uint16\+\_\+t {\bfseries adc\+\_\+result1} = 0
+\item 
+\Hypertarget{main_8c_a3eb703333cbdd789b86ad7041605a15d}\label{main_8c_a3eb703333cbdd789b86ad7041605a15d} 
+uint16\+\_\+t {\bfseries adc\+\_\+result2} = 0
+\item 
+\Hypertarget{main_8c_a652cf5c0db62adda6fda9c78d6e96851}\label{main_8c_a652cf5c0db62adda6fda9c78d6e96851} 
+\mbox{\hyperlink{structmotor__params__t}{motor\+\_\+params\+\_\+t}} {\bfseries motor}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\+: Main program body 
+
+\begin{DoxyAttention}{Attention}
+
+\end{DoxyAttention}
+Copyright (c) 2023 STMicroelectronics. All rights reserved.
+
+This software is licensed under terms that can be found in the LICENSE file in the root directory of this software component. If no LICENSE file comes with this software, it is provided AS-\/\+IS. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_a1730ffe1e560465665eb47d9264826f9}\label{main_8c_a1730ffe1e560465665eb47d9264826f9} 
+\index{main.c@{main.c}!Error\_Handler@{Error\_Handler}}
+\index{Error\_Handler@{Error\_Handler}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{Error\_Handler()}{Error\_Handler()}}
+{\footnotesize\ttfamily void Error\+\_\+\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function is executed in case of error occurrence. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em None} & \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{main_8c_a840291bc02cba5474a4cb46a9b9566fe}\label{main_8c_a840291bc02cba5474a4cb46a9b9566fe} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The application entry point. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em int} & \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{main_8c_a7f40d62749b2d719089762eff4d66593}\label{main_8c_a7f40d62749b2d719089762eff4d66593} 
+\index{main.c@{main.c}!measure\_loop@{measure\_loop}}
+\index{measure\_loop@{measure\_loop}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{measure\_loop()}{measure\_loop()}}
+{\footnotesize\ttfamily void measure\+\_\+loop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmotor__params__t}{motor\+\_\+params\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{motor }\end{DoxyParamCaption})}
+
+
+\begin{DoxyEnumerate}
+\item Measure motor current
+\end{DoxyEnumerate}\Hypertarget{main_8c_a70af21c671abfcc773614a9a4f63d920}\label{main_8c_a70af21c671abfcc773614a9a4f63d920} 
+\index{main.c@{main.c}!SystemClock\_Config@{SystemClock\_Config}}
+\index{SystemClock\_Config@{SystemClock\_Config}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{SystemClock\_Config()}{SystemClock\_Config()}}
+{\footnotesize\ttfamily void System\+Clock\+\_\+\+Config (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+System Clock Configuration. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em None} & \\
+\hline
+\end{DoxyRetVals}
+Configure the main internal regulator output voltage
+
+Initializes the RCC Oscillators according to the specified parameters in the \doxylink{struct_r_c_c___osc_init_type_def}{RCC\+\_\+\+Osc\+Init\+Type\+Def} structure.
+
+Initializes the CPU, AHB and APB buses clocks

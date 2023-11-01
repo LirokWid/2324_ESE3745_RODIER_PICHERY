@@ -4,6 +4,8 @@ Projet realised by @MaximePich et @LirokWid
 
 This project is designed for controlling a motor using an STM32G474 microcontroller on a Nucleo development board. It includes a simple shell interface for user interaction and motor control. The software provides functionalities for starting/stopping the motor, setting the motor speed, and monitoring the motor's current.
 
+Example of the motor being controlled : https://youtube.com/shorts/cWRz2HWbShM
+
 ## Table of Contents
 
 - [Introduction](#nucleo-stm32g474-motor-control-project)

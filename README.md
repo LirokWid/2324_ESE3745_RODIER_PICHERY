@@ -48,9 +48,10 @@ When you power up the system, it will initialize and display a shell prompt.
 
 You can enter various commands to control the motor:
 
-help: Display a list of available commands.
-start: Start the motor.
-stop: Stop the motor.
-speed <value>: Set the motor speed, where <value> is between -100 and 100.
+- help: Display a list of available commands.
+- start: Start the motor.
+- stop: Stop the motor.
+- speed <value>: Set the motor speed, where <value> is between -100 and 100.
+
 Use the shell interface to monitor the motor's current and control its behavior.
 

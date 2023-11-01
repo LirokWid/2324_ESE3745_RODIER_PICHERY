@@ -1,9 +1,4 @@
-Projet réalisé par @MaximePich et @LirokWid
-
-
-This projects aims to control a DC motor with an STM32G474RET6 microcontroller
-To run the project, open it with STM32CubeIDE Version 1.13.2 or higher
-Once uploaded, you can control the motor with a shell on serial port, see shell.c to see all available commands
+Projet realised by @MaximePich et @LirokWid
 
 # Nucleo-STM32G474 Motor Control Project
 
@@ -16,8 +11,6 @@ This project is designed for controlling a motor using an STM32G474 microcontrol
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
